@@ -13,7 +13,7 @@ public class TodoApp {
 
 	public static void main(String[] args) {
 		try {
-			System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "off");
+			System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "info");
 			try (SqlDb db = new SqlDb()) {
 				insertData(db);
 				dumpData(db);

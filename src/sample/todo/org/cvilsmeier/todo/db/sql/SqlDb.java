@@ -136,87 +136,89 @@ public class SqlDb implements Db, AutoCloseable {
 
 	// @sql-begin
 
-	// sql class Task
 
-	private String _taskCols(String alias) {
-		if (alias == null || alias.isEmpty()) {
-			return "id,created,userId,title,status";
-		}
-		return alias + ".id" + "," + alias + ".created" + "," + alias + ".userId" + "," + alias + ".title" + "," + alias + ".status";
-	}
+    // class Task
 
-	private Task _readTask(ResultSet rst, SqlIndex si) throws SQLException {
-		String id = rst.getString(si.next());
-		Instant created = toInstant(rst.getTimestamp(si.next()));
-		String userId = rst.getString(si.next());
-		String title = rst.getString(si.next());
-		TaskStatus status = toTaskStatus(rst.getString(si.next()));
-		return new Task(id, created, userId, title, status);
-	}
+    private String _taskCols(String alias) {
+        if (alias == null || alias.isEmpty()) {
+            return "id,created,userId,title,status";
+        }
+        return alias + ".id" + "," + alias + ".created" + "," + alias + ".userId" + "," + alias + ".title" + "," + alias + ".status";
+    }
 
-	private void _writeTask(PreparedStatement pst, Task task, SqlIndex si) throws SQLException {
-		pst.setTimestamp(si.next(), toTimestamp(task.getCreated()));
-		pst.setString(si.next(), task.getUserId());
-		pst.setString(si.next(), task.getTitle());
-		pst.setString(si.next(), toVarchar(task.getStatus()));
-	}
+    private Task _readTask(ResultSet rst, SqlIndex si) throws SQLException {
+        String id = rst.getString(si.next());
+        Instant created = toInstant(rst.getTimestamp(si.next()));
+        String userId = rst.getString(si.next());
+        String title = rst.getString(si.next());
+        TaskStatus status = toTaskStatus(rst.getString(si.next()));
+        return new Task(id,created,userId,title,status);
+    }
 
-	private void _insertTask(Connection con, Task task) throws SQLException {
-		String sql = "INSERT INTO tasks(id,created,userId,title,status) VALUES(?,?,?,?,?)";
-		update(con, sql, pst -> {
-			SqlIndex si = new SqlIndex();
-			pst.setString(si.next(), task.getId());
-			_writeTask(pst, task, si);
-		});
-	}
+    private void _writeTask(PreparedStatement pst, Task task, SqlIndex si) throws SQLException {
+        pst.setTimestamp(si.next(), toTimestamp(task.getCreated()));
+        pst.setString(si.next(), task.getUserId());
+        pst.setString(si.next(), task.getTitle());
+        pst.setString(si.next(), toVarchar(task.getStatus()));
+    }
 
-	private void _updateTask(Connection con, Task task) throws SQLException {
-		String sql = "UPDATE tasks SET created=?,userId=?,title=?,status=? WHERE id=?";
-		update(con, sql, pst -> {
-			SqlIndex si = new SqlIndex();
-			_writeTask(pst, task, si);
-			pst.setString(si.next(), task.getId());
-		});
-	}
+    private void _insertTask(Connection con, Task task) throws SQLException {
+        String sql = "INSERT INTO tasks(id,created,userId,title,status) VALUES(?,?,?,?,?)";
+        update(con, sql, pst -> {
+            SqlIndex si = new SqlIndex();
+            pst.setString(si.next(), task.getId());
+            _writeTask(pst, task, si);
+        });
+    }
 
-	// sql class User
+    private void _updateTask(Connection con, Task task) throws SQLException {
+        String sql = "UPDATE tasks SET created=?,userId=?,title=?,status=? WHERE id=?";
+        update(con, sql, pst -> {
+            SqlIndex si = new SqlIndex();
+            _writeTask(pst, task, si);
+            pst.setString(si.next(), task.getId());
+        });
+    }
 
-	private String _userCols(String alias) {
-		if (alias == null || alias.isEmpty()) {
-			return "id,login,password";
-		}
-		return alias + ".id" + "," + alias + ".login" + "," + alias + ".password";
-	}
+    // class User
 
-	private User _readUser(ResultSet rst, SqlIndex si) throws SQLException {
-		String id = rst.getString(si.next());
-		String login = rst.getString(si.next());
-		String password = rst.getString(si.next());
-		return new User(id, login, password);
-	}
+    private String _userCols(String alias) {
+        if (alias == null || alias.isEmpty()) {
+            return "id,login,password";
+        }
+        return alias + ".id" + "," + alias + ".login" + "," + alias + ".password";
+    }
 
-	private void _writeUser(PreparedStatement pst, User user, SqlIndex si) throws SQLException {
-		pst.setString(si.next(), user.getLogin());
-		pst.setString(si.next(), user.getPassword());
-	}
+    private User _readUser(ResultSet rst, SqlIndex si) throws SQLException {
+        String id = rst.getString(si.next());
+        String login = rst.getString(si.next());
+        String password = rst.getString(si.next());
+        return new User(id,login,password);
+    }
 
-	private void _insertUser(Connection con, User user) throws SQLException {
-		String sql = "INSERT INTO users(id,login,password) VALUES(?,?,?)";
-		update(con, sql, pst -> {
-			SqlIndex si = new SqlIndex();
-			pst.setString(si.next(), user.getId());
-			_writeUser(pst, user, si);
-		});
-	}
+    private void _writeUser(PreparedStatement pst, User user, SqlIndex si) throws SQLException {
+        pst.setString(si.next(), user.getLogin());
+        pst.setString(si.next(), user.getPassword());
+    }
 
-	private void _updateUser(Connection con, User user) throws SQLException {
-		String sql = "UPDATE users SET login=?,password=? WHERE id=?";
-		update(con, sql, pst -> {
-			SqlIndex si = new SqlIndex();
-			_writeUser(pst, user, si);
-			pst.setString(si.next(), user.getId());
-		});
-	}
+    private void _insertUser(Connection con, User user) throws SQLException {
+        String sql = "INSERT INTO users(id,login,password) VALUES(?,?,?)";
+        update(con, sql, pst -> {
+            SqlIndex si = new SqlIndex();
+            pst.setString(si.next(), user.getId());
+            _writeUser(pst, user, si);
+        });
+    }
+
+    private void _updateUser(Connection con, User user) throws SQLException {
+        String sql = "UPDATE users SET login=?,password=? WHERE id=?";
+        update(con, sql, pst -> {
+            SqlIndex si = new SqlIndex();
+            _writeUser(pst, user, si);
+            pst.setString(si.next(), user.getId());
+        });
+    }
+
 
 	// @sql-end
 

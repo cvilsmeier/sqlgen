@@ -18,7 +18,7 @@ public class SqlGen {
 
 	public static final boolean VERBOSE = true;
 	public static final String SOURCE_DIR = "src/sample/todo";
-	public static final String DEST_FILE = ""; // empty means print code to stdout
+	public static final String DEST_FILE = "src/sample/todo/org/cvilsmeier/todo/db/sql/SqlDb.java"; // empty means print code to stdout
 
 	public static final String SQL_CLASS_MARKER = "@" + "sql-class";
 	public static final String SQL_TABLE_MARKER = "@" + "sql-table";
@@ -188,8 +188,8 @@ public class SqlGen {
 		String var = uncap(klass.name);
 		// _cols
 		{
-			String nakedCols = "id,createdAt";
-			String aliasCols = "alias + \".id,\" + alias + \".createdAt\"";
+			String nakedCols = "id";
+			String aliasCols = "alias + \".id\"";
 			for (Field field : klass.fields) {
 				nakedCols += "," + field.name;
 				aliasCols += " + \",\" + alias + \"." + field.name + "\"";
@@ -206,7 +206,6 @@ public class SqlGen {
 		{
 			code.append("    private " + klass.name + " _read" + klass.name + "(ResultSet rst, SqlIndex si) throws SQLException {").append("\n");
 			code.append("        String id = rst.getString(si.next());").append("\n");
-			code.append("        Instant createdAt = toInstant(rst.getTimestamp(si.next()));").append("\n");
 			String args = "";
 			for (Field field : klass.fields) {
 				switch (field.javaType) {
@@ -228,14 +227,13 @@ public class SqlGen {
 				}
 				args += "," + field.name;
 			}
-			code.append("        return new " + klass.name + "(id,createdAt" + args + ");").append("\n");
+			code.append("        return new " + klass.name + "(id" + args + ");").append("\n");
 			code.append("    }").append("\n");
 			code.append("\n");
 		}
 		// _write
 		if (klass.write) {
 			code.append("    private void _write" + klass.name + "(PreparedStatement pst, " + klass.name + " " + var + ", SqlIndex si) throws SQLException {").append("\n");
-			code.append("        pst.setTimestamp(si.next(), toTimestamp(" + var + ".getCreatedAt()));").append("\n");
 			for (Field field : klass.fields) {
 				String getter = "get" + cap(field.name);
 				String iser = "is" + cap(field.name);
@@ -262,8 +260,8 @@ public class SqlGen {
 		}
 		// _insert
 		if (klass.insert) {
-			String cols = "id,createdAt";
-			String placers = "?,?";
+			String cols = "id";
+			String placers = "?";
 			for (Field field : klass.fields) {
 				cols += "," + field.name;
 				placers += ",?";
@@ -281,7 +279,6 @@ public class SqlGen {
 		// _update
 		if (klass.update) {
 			StringJoiner cols = new StringJoiner(",");
-			cols.add("createdAt=?");
 			for (Field field : klass.fields) {
 				cols.add(field.name + "=?");
 			}
@@ -334,10 +331,10 @@ public class SqlGen {
 		}
 		String text = textBuilder.toString();
 		if( ! text.isEmpty() ) {
-			log("merged code into " + file);
 			try (BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
 				w.write(text);
 			}
+			log("merged code into " + file);
 		} else {
 			log("destFile did not contain "+SQL_BEGIN_MARKER+" and/or "+SQL_END_MARKER);
 		}

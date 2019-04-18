@@ -2,7 +2,7 @@ package org.cvilsmeier.todo.db;
 
 import java.time.Instant;
 
-// @sql-class Task
+//@sql-class Task
 public class Task extends Entity {
 
 	// @sql-fields
