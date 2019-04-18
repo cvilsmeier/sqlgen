@@ -1,4 +1,4 @@
-package org.cvilsmeier.todo.db.sql;
+package todo.db.sql;
 public class SqlFailure extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

@@ -1,10 +1,10 @@
-package org.cvilsmeier.todo.db.sql;
+package todo.db.sql;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.cvilsmeier.todo.db.Entity;
+import todo.db.Entity;
 
 public class SqlList<E extends Entity> {
 

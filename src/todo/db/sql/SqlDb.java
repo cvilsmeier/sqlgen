@@ -1,4 +1,4 @@
-package org.cvilsmeier.todo.db.sql;
+package todo.db.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.cvilsmeier.todo.db.Db;
-import org.cvilsmeier.todo.db.Task;
-import org.cvilsmeier.todo.db.TaskStatus;
-import org.cvilsmeier.todo.db.User;
 import org.hsqldb.jdbc.JDBCPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import todo.db.Db;
+import todo.db.Task;
+import todo.db.TaskStatus;
+import todo.db.User;
 
 public class SqlDb implements Db, AutoCloseable {
 

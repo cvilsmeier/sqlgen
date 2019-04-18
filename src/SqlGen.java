@@ -1,4 +1,3 @@
-package org.cvilsmeier.sqlgen;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -330,13 +329,13 @@ public class SqlGen {
 			}
 		}
 		String text = textBuilder.toString();
-		if( ! text.isEmpty() ) {
+		if (!text.isEmpty()) {
 			try (BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
 				w.write(text);
 			}
 			log("merged code into " + file);
 		} else {
-			log("destFile did not contain "+SQL_BEGIN_MARKER+" and/or "+SQL_END_MARKER);
+			log("destFile did not contain " + SQL_BEGIN_MARKER + " and/or " + SQL_END_MARKER);
 		}
 	}
 

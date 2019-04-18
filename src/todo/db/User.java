@@ -1,4 +1,4 @@
-package org.cvilsmeier.todo.db;
+package todo.db;
 
 import java.util.List;
 

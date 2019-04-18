@@ -1,13 +1,13 @@
-package org.cvilsmeier.todo;
+package todo;
 
 import java.time.Instant;
 import java.util.List;
 
-import org.cvilsmeier.todo.db.Db;
-import org.cvilsmeier.todo.db.Task;
-import org.cvilsmeier.todo.db.TaskStatus;
-import org.cvilsmeier.todo.db.User;
-import org.cvilsmeier.todo.db.sql.SqlDb;
+import todo.db.Db;
+import todo.db.Task;
+import todo.db.TaskStatus;
+import todo.db.User;
+import todo.db.sql.SqlDb;
 
 public class TodoApp {
 

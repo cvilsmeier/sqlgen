@@ -1,4 +1,4 @@
-package org.cvilsmeier.todo.db.sql;
+package todo.db.sql;
 
 public class SqlIndex {
 
